@@ -36,7 +36,7 @@
   }
 </script>
 
-<main class="m-10 mt-10 bg-white p-6 rounded-lg drop-shadow-lg">
+<main class="m-4 sm:m-10 bg-white p-4 sm:p-6 rounded-lg drop-shadow-lg">
   <h1 class="text-lg font-bold text-blue-500">delphi</h1>
 
   {#if fortune === ""}
@@ -81,7 +81,7 @@
         </div>
       {/if}
 
-      <h2 class="mt-8 text-sm text-neutral-700">
+      <h2 class="mt-5 text-sm text-neutral-700">
         come back tomorrow for another unique fortune
       </h2>
     </div>
