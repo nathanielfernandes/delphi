@@ -8,6 +8,8 @@
   let numbers = [];
   let theme = "";
 
+  let image_url = "";
+
   async function getFortune() {
     thinking = true;
 
@@ -19,10 +21,22 @@
     theme = data.theme;
 
     thinking = false;
+
+    if (data["image"]) {
+      image_url = data["image"];
+      return;
+    }
+
+    const image_res = await fetch(
+      "https://apollo.ncp.nathanferns.xyz/fortune/image"
+    );
+    const url = await image_res.json();
+
+    image_url = url;
   }
 </script>
 
-<main class="mx-10 my-5">
+<main class="m-10 mt-10 bg-white p-6 rounded-lg drop-shadow-lg">
   <h1 class="text-lg font-bold text-blue-500">delphi</h1>
 
   {#if fortune === ""}
@@ -33,9 +47,10 @@
 
       <button
         on:click={getFortune}
-        class="flex items-center justify-center w-40 h-40 p-5 bg-neutral-100 rounded-full shadow-lg"
+        class="flex items-center px-4 py-2 rounded-md drop-shadow-lg bg-blue-500 text-white font-bold justify-between w-60 hover:bg-blue-400 active:bg-blue-600 transition-all duration-100"
       >
-        <img src={cookie} class="w-40" alt="Fortune Cookie" />
+        <div>Generate Fortune</div>
+        <img src={cookie} class="w-10" alt="Fortune Cookie" />
       </button>
     {/if}
   {:else}
@@ -51,14 +66,32 @@
       <div class="flex flex-wrap mt-5">
         {#each numbers as number}
           <div
-            class="flex items-center justify-center w-10 h-10 mr-2 mb-2 text-lg font-bold text-blue-500 bg-neutral-100 rounded-md shadow-md"
+            class="flex items-center justify-center w-10 h-10 mr-2 mb-2 text-lg font-bold text-blue-500 bg-slate-100 rounded-md shadow-md"
           >
             {number}
           </div>
         {/each}
       </div>
 
-      <h2 class="mt-8">come back tomorrow for another unique fortune</h2>
+      {#if image_url === ""}
+        <div class="mt-5 animate-pulse text-lg">Generating image...</div>
+      {:else}
+        <div class="mt-5">
+          <img src={image_url} class="w-full rounded-md" alt={fortune} />
+        </div>
+      {/if}
+
+      <h2 class="mt-8 text-sm text-neutral-700">
+        come back tomorrow for another unique fortune
+      </h2>
     </div>
   {/if}
 </main>
+
+<style>
+  :global(body) {
+    margin: auto;
+    max-width: 800px;
+    background-color: #f1f5f9;
+  }
+</style>
